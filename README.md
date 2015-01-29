@@ -15,10 +15,25 @@ After installing reboot or run `/etc/init.d/afsc start`. *NO WARRANTY. USE AT YO
 
 ### Success story list
 * UL30JT
+* UL30VT
+* U35JC
 * F3JP
+* F3JC
+* F3JM
+* F3F
+* F6A
+* F8VA
+* 50SR
+* F8SA
+* X56V
+* X59SL
+* B50A
+* M51VA
+
 
 ### Links
 [Similar project](https://github.com/nicolai-rostov/asus-fancontrol)<br>
 [Clang tutorial](https://solarianprogrammer.com/2013/01/17/building-clang-libcpp-ubuntu-linux/)<br>
-[A.Breckel original paper](http://www.aneas.org/knowledge/asus_f3jp_fan_control.php)
+[A.Breckel original paper](http://www.aneas.org/knowledge/asus_f3jp_fan_control.php) is currently unavailable, you can fetch html page from my repo or checkout [preview](https://github.com/aot9/AFSC/blob/master/asus_f3jp_fan_control.md)<br>
+
 
