@@ -33,7 +33,7 @@ int parseConfig(const std::string& sconf, AfcdConfig& config)
     std::string bc = "(?:\\s*(?:#.*[\r\n])*)*";
 
     /*
-     * regex that match afcd config file
+     * regex that match afsc config file
      */
     std::regex r(bc + "TEMP_SOURCE=([-./[:alpha:]]+)"+
                  bc + "INTERVAL=(\\d+)"+
