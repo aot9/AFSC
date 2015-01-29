@@ -8,7 +8,7 @@
     loggerInst(static_cast<std::ostringstream&>(std::ostringstream().flush() << #level \
                                                                       << " "    \
                                                                       << _msg   \
-                                        ).str()); 
+                                        ).str());
 class Logger
 {
     private:

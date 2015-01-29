@@ -8,16 +8,16 @@
 #include "Util.h"
 #include "Logger.h"
 
-Logger log("/home/vm-user/projects/afcd/daemon.txt");
-
 #define noop (void(0))
 
-#ifdef LOGGING
-    #define ILOG(_msg) LOG(log, INFO, _msg)
-    #define ELOG(_msg) LOG(log, ERROR, _msg)
-#else
+#ifdef NLOG
     #define ILOG(_msg) noop
     #define ELOG(_msg) noop
+#else
+    Logger log("/var/log/afcd.log");
+
+    #define ILOG(_msg) LOG(log, INFO, _msg)
+    #define ELOG(_msg) LOG(log, ERROR, _msg)
 #endif
 
 // IO ports
@@ -67,35 +67,35 @@ int main()
 {
     std::string sconfig;
     AfcdConfig config;
-    
+
     int curTemp = 0;
     int speed = 0;
 
-    if (readConfigToString("/home/vm-user/projects/afcd/afcd.conf", sconfig) != 0)
+    if (readConfigToString("/etc/afcd.conf", sconfig) != 0)
     {
         ELOG("Unable to read config");
         exit(1);
     }
-    
+
     if (parseConfig(sconfig, config) != 0)
     {
         ELOG("Invalid config");
         exit(1);
     }
-    
+
     std::ifstream temp_source(config.path, std::ifstream::in);
     if (temp_source.fail())
     {
         ELOG("Unable to open temperature source file");
         exit(1);
     }
-    
+
     if (daemon(0, 0) != 0)
     {
         ELOG("Unable to daemonize");
         exit(1);
     }
-   
+
     registerSignals();
 
     while (true)
@@ -103,7 +103,8 @@ int main()
         temp_source.clear();
         temp_source.seekg(0, temp_source.beg);
         temp_source >> curTemp;
-        
+
+        // check if temperature is under lowest threshold
         if (curTemp <= config.temp_policy.rbegin()->first)
             speed = config.min_speed;
         else
@@ -111,32 +112,33 @@ int main()
             for (auto tempPolItem : config.temp_policy)
             {
                 if (curTemp > tempPolItem.first)
-                {    
+                {
                     speed = tempPolItem.second;
                     break;
                 }
-            } 
-        }       
+            }
+        }
 
-        ILOG("Temperature is " << curTemp << ", setting speed to " << speed);   
+        ILOG("Temperature is " << curTemp << ", setting speed to " << speed);
         
         // speed control code here
         speed = (speed << 3) | 0x07;
-        
-        if(ioperm(AEID, 1, 1)) 
+
+#ifdef NDEBUG
+        if(ioperm(AEID, 1, 1))
         {
             ELOG("Could not gain access to IO port AEID (0x025C). Exiting...");
             exit(1);
         }
 
-        if(ioperm(AEIC, 1, 1)) 
+        if(ioperm(AEIC, 1, 1))
         {
             ELOG("Could not gain access to IO port AEIC (0x025D). Exiting...");
             exit(1);
         }
-
         WMFN(speed);
-        
+#endif
+
         sleep(config.interval);
     }
 }
