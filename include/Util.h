@@ -14,5 +14,6 @@ struct AfcdConfig {
 
 int readConfigToString(const std::string& config_path, std::string& sconf);
 int parseConfig(const std::string& sconf, AfcdConfig& config);
+void writelog(const std::string& msg);
 
 #endif

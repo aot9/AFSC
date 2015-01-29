@@ -1,24 +1,18 @@
 #include <sstream>
-
+#include <fstream>
 #include <unistd.h>
 #include <signal.h>
 #include <cstdint> // uint8_t, uint16_t
 #include <sys/io.h> // inb, outb
 
 #include "Util.h"
-#include "Logger.h"
 
-#define noop (void(0))
+#define _LOG(level, _msg)\
+    writelog(static_cast<std::ostringstream&>(std::ostringstream().flush() << \
+             #level << " " << _msg).str());
 
-#ifdef NLOG
-    #define ILOG(_msg) noop
-    #define ELOG(_msg) noop
-#else
-    Logger log("/var/log/afcd.log");
-
-    #define ILOG(_msg) LOG(log, INFO, _msg)
-    #define ELOG(_msg) LOG(log, ERROR, _msg)
-#endif
+#define ILOG(_msg) _LOG(INFO, _msg)
+#define ELOG(_msg) _LOG(ERROR, _msg)
 
 // IO ports
 const uint16_t AEIC = 0x025D; // command register
@@ -71,7 +65,7 @@ int main()
     int curTemp = 0;
     int speed = 0;
 
-    if (readConfigToString("/etc/afcd.conf", sconfig) != 0)
+    if (readConfigToString("/etc/afsc.conf", sconfig) != 0)
     {
         ELOG("Unable to read config");
         exit(1);

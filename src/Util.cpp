@@ -5,6 +5,9 @@
 #include <map>
 #include <regex>
 #include <algorithm>
+#include <chrono>
+#include <ctime>
+#include <iomanip>
 
 #include "Util.h"
 
@@ -35,7 +38,7 @@ int parseConfig(const std::string& sconf, AfcdConfig& config)
     /*
      * regex that match afsc config file
      */
-    std::regex r(bc + "TEMP_SOURCE=([-./[:alpha:]]+)"+
+    std::regex r(bc + "TEMP_SOURCE=([-_./[:alnum:]]+)"+
                  bc + "INTERVAL=(\\d+)"+
                  bc + "MIN_SPEED=(\\d+)"+
                  bc + "POLICY=((?:\\d+:\\d+\\s+)+)" + bc);
@@ -68,5 +71,20 @@ int parseConfig(const std::string& sconf, AfcdConfig& config)
     }(m[4].str());
 
     return 0;
+}
+
+void writelog(const std::string& msg)
+{
+    static std::ofstream log("/var/log/afsc.log", std::ofstream::out | std::ofstream::app);
+
+    if (log.fail())
+        return;
+
+    auto now = std::chrono::system_clock::now();
+    auto now_c = std::chrono::system_clock::to_time_t(now);
+
+    log << std::put_time(std::localtime(&now_c), "%c") << " "
+            << msg << '\n';
+    log.flush();
 }
 
