@@ -107,6 +107,8 @@ int main()
 
     registerSignals();
 
+    int oldRelSpeed = 0;
+
     while (true)
     {
         int curTemp = 0;
@@ -134,10 +136,14 @@ int main()
             }
         }
 
-        if (relSpeed == 255)
-            ILOG("Temperature is " << curTemp << ", setting speed to auto")
-        else
-            ILOG("Temperature is " << curTemp << ", setting speed to " << relSpeed);
+        // Write log only if speed has changed
+        if (oldRelSpeed != relSpeed)
+        {
+            if (relSpeed == 255)
+                ILOG("Temperature is " << curTemp << ", setting speed to auto")
+            else
+                ILOG("Temperature is " << curTemp << ", setting speed to " << relSpeed);
+        }
 
 #ifdef NDEBUG
         // The MSB (Bit 7) control the method of fan control:
@@ -164,6 +170,7 @@ int main()
         WMFN(speed);
 #endif
 
+        oldRelSpeed = relSpeed;
         sleep(config.interval);
     }
 }
