@@ -147,7 +147,7 @@ int main()
         // from value 0x5 to 0xF: fan speeds in ascending order
         uint8_t speed = (relSpeed == 255)
                                    ? 1 << 7
-                                   : ((relSpeed | 0x05) << 3) | 0x07;
+                                   : ((relSpeed + 5) << 3) | 0x07;
 
         if(ioperm(AEID, 1, 1))
         {
