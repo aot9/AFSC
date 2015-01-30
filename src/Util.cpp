@@ -37,8 +37,8 @@ int parseConfig(const std::string& sconf, AfcdConfig& config)
     // match afsc config file
     std::regex r(bc + "TEMP_SOURCE=([-_./[:alnum:]]+)"+
                  bc + "INTERVAL=(\\d+)"+
-                 bc + "MIN_SPEED=([0-9]|10|250)"+
-                 bc + "POLICY=((?:\\d+:(?:[0-9]|10|250)\\s+)+)" + bc);
+                 bc + "MIN_SPEED=([0-9]|10|255)"+
+                 bc + "POLICY=((?:\\d+:(?:[0-9]|10|255)\\s+)+)" + bc);
 
     std::regex_match(sconf, m, r);
 

@@ -18,11 +18,11 @@ install:
 	@cp ./build/afsc /usr/sbin/
 	@cp afsc.conf /etc/
 	@cp afsc.sh /etc/init.d/afsc
-	@update-rc.d
+	@update-rc.d afsc defaults
 
 uninstall:
 	@rm /usr/sbin/afsc
 	@rm /etc/afsc.conf
 	@rm /etc/init.d/afsc
-	@update-rc.d
+	@update-rc.d afsc remove
 

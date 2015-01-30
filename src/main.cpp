@@ -52,7 +52,12 @@ void WMFN(uint8_t Arg0) {
 void signalHandler(int sig)
 {
     ILOG("Signal caught: " << sig << ". Exiting...");
+#ifdef NDEBUG
+    // restore auto speed control
+    WMFN(1<<7);
+#endif
     exit(sig);
+
 }
 
 void registerSignals()
@@ -129,7 +134,7 @@ int main()
             }
         }
 
-        if (relSpeed == 250)
+        if (relSpeed == 255)
             ILOG("Temperature is " << curTemp << ", setting speed to auto")
         else
             ILOG("Temperature is " << curTemp << ", setting speed to " << relSpeed);
@@ -140,7 +145,9 @@ int main()
         // The next 4 Bit (Bit 6 - 2) sets the fan speed (only when Bit 7 is 0):
         // value 0x0 to 0x5: fan is off
         // from value 0x5 to 0xF: fan speeds in ascending order
-        uint8_t speed = ((relSpeed | 0x05) << 3) | 0x07;
+        uint8_t speed = (relSpeed == 255)
+                                   ? 1 << 7
+                                   : ((relSpeed | 0x05) << 3) | 0x07;
 
         if(ioperm(AEID, 1, 1))
         {

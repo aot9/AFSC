@@ -1,13 +1,13 @@
-#! /bin/sh:
+#! /bin/sh
 ### BEGIN INIT INFO
 # Provides:          afsc
-# Required-Start:    
-# Required-Stop:     
+# Required-Start:    $local_fs $syslog
+# Required-Stop:
 # Default-Start:     2 3 4 5
 # Default-Stop:      0 1 6
 # Short-Description: Asus Fan Control daemon
 # Description:       Daemon that controls fan speed by manipulating DSDT registers
-#                 
+#
 ### END INIT INFO
 
 # Author: Oleksii Titov <aotitov@i.ua>
@@ -23,9 +23,8 @@ DESC="Asus Fan Speed Control"
 NAME=afsc
 DAEMON=/usr/sbin/$NAME
 DAEMON_ARGS=""
-PIDFILE=/var/run/$NAME.pid
+#PIDFILE=/var/run/$NAME.pidCRIPTNAME=/etc/init.d/$NAME
 SCRIPTNAME=/etc/init.d/$NAME
-
 # Exit if the package is not installed
 [ -x "$DAEMON" ] || exit 0
 
@@ -49,9 +48,9 @@ do_start()
 	#   0 if daemon has been started
 	#   1 if daemon was already running
 	#   2 if daemon could not be started
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON --test > /dev/null \
+	start-stop-daemon --start --quiet --exec $DAEMON --test > /dev/null \
 		|| return 1
-	start-stop-daemon --start --quiet --pidfile $PIDFILE --exec $DAEMON -- \
+	start-stop-daemon --start --quiet --exec $DAEMON -- \
 		$DAEMON_ARGS \
 		|| return 2
 	# Add code here, if necessary, that waits for the process to be ready
@@ -69,7 +68,7 @@ do_stop()
 	#   1 if daemon was already stopped
 	#   2 if daemon could not be stopped
 	#   other if a failure occurred
-	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --quiet --retry=TERM/30/KILL/5 --name $NAME
 	RETVAL="$?"
 	[ "$RETVAL" = 2 ] && return 2
 	# Wait for children to finish too if this is a daemon that forks
@@ -94,7 +93,7 @@ do_reload() {
 	# restarting (for example, when it is sent a SIGHUP),
 	# then implement that here.
 	#
-	start-stop-daemon --stop --signal 1 --quiet --pidfile $PIDFILE --name $NAME
+	start-stop-daemon --stop --signal 1 --quiet --name $NAME
 	return 0
 }
 
