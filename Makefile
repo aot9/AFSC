@@ -4,11 +4,15 @@ INC_DIR := ./include/
 CXXFLAGS := -Wall -Wextra -O2 -std=c++11 -stdlib=libc++
 DEST_DIR := ./build
 
-.PHONY: install clean
+.PHONY: uninstall install
 
-all:
+release:
 	@test -d $(DEST_DIR) || mkdir $(DEST_DIR)
-	$(CXX) $(CXXFLAGS) ${DEFS} -I$(INC_DIR) $(CPP_FILES) -o $(DEST_DIR)/afsc
+	$(CXX) $(CXXFLAGS) -DNDEBUG -I$(INC_DIR) $(CPP_FILES) -o $(DEST_DIR)/afsc
+
+debug:
+	@test -d $(DEST_DIR) || mkdir $(DEST_DIR)
+	$(CXX) $(CXXFLAGS) -g -I$(INC_DIR) $(CPP_FILES) -o $(DEST_DIR)/afsc_debug
 
 install:
 	@cp ./build/afsc /usr/sbin/

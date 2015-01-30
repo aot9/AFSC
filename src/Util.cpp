@@ -8,6 +8,7 @@
 #include <chrono>
 #include <ctime>
 #include <iomanip>
+#include <iostream>
 
 #include "Util.h"
 
@@ -29,19 +30,15 @@ int parseConfig(const std::string& sconf, AfcdConfig& config)
 {
     std::smatch m;
 
-    /*
-     * regex that match blank lines, trailing spaces
-     * and bash like comments
-     */
+     // match blank lines, trailing spaces
+     // and bash like comments
     std::string bc = "(?:\\s*(?:#.*[\r\n])*)*";
 
-    /*
-     * regex that match afsc config file
-     */
+    // match afsc config file
     std::regex r(bc + "TEMP_SOURCE=([-_./[:alnum:]]+)"+
                  bc + "INTERVAL=(\\d+)"+
-                 bc + "MIN_SPEED=(\\d+)"+
-                 bc + "POLICY=((?:\\d+:\\d+\\s+)+)" + bc);
+                 bc + "MIN_SPEED=([0-9]|10|250)"+
+                 bc + "POLICY=((?:\\d+:(?:[0-9]|10|250)\\s+)+)" + bc);
 
     std::regex_match(sconf, m, r);
 
