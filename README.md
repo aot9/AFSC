@@ -5,7 +5,7 @@ Daemon that provides fan speed control for Asus laptops by manipulating [DSDT](h
 ### Installation
 This project uses c++11 features(it wasn't absolutely neccessary, just for fun) which are not fully supported until GCC 4.9 or Clang 3.4.
 
-    git clone https://github.com/aot9/AFSC asfc
+    git clone https://github.com/aot9/AFSC afsc
     cd afsc/
     make
     sudo make install
@@ -34,6 +34,6 @@ After installing reboot or run `/etc/init.d/afsc start`. *NO WARRANTY. USE AT YO
 ### Links
 [Similar project](https://github.com/nicolai-rostov/asus-fancontrol)<br>
 [Clang tutorial](https://solarianprogrammer.com/2013/01/17/building-clang-libcpp-ubuntu-linux/)<br>
-[A.Breckel original paper](http://www.aneas.org/knowledge/asus_f3jp_fan_control.php) is currently unavailable, so i added saved page to repo, [preview](http://htmlpreview.github.io/?https://github.com/aot9/AFSC/blob/master/asus_f3jp_fan_control.php.html)<br>
+[A.Breckel original paper](http://www.aneas.org/knowledge/asus_f3jp_fan_control.php) is currently unavailable, checkout [saved page](http://htmlpreview.github.io/?https://github.com/aot9/AFSC/blob/master/asus_f3jp_fan_control.php.html) from repo<br>
 
 
